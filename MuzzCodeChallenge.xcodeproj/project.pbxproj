@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		89771F312D96D7B900478804 /* InputBarAccessoryView in Frameworks */ = {isa = PBXBuildFile; productRef = 89771F302D96D7B900478804 /* InputBarAccessoryView */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		8982B3CD2D959F0000610087 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89771F312D96D7B900478804 /* InputBarAccessoryView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = MuzzCodeChallenge;
 			packageProductDependencies = (
+				89771F302D96D7B900478804 /* InputBarAccessoryView */,
 			);
 			productName = MuzzCodeChallenge;
 			productReference = 8982B3BC2D959EFE00610087 /* MuzzCodeChallenge.app */;
@@ -196,6 +202,9 @@
 			);
 			mainGroup = 8982B3B32D959EFE00610087;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				89771F2F2D96D74B00478804 /* XCRemoteSwiftPackageReference "InputBarAccessoryView" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8982B3BD2D959EFE00610087 /* Products */;
 			projectDirPath = "";
@@ -557,6 +566,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		89771F2F2D96D74B00478804 /* XCRemoteSwiftPackageReference "InputBarAccessoryView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nathantannar4/InputBarAccessoryView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		89771F302D96D7B900478804 /* InputBarAccessoryView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89771F2F2D96D74B00478804 /* XCRemoteSwiftPackageReference "InputBarAccessoryView" */;
+			productName = InputBarAccessoryView;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8982B3B42D959EFE00610087 /* Project object */;
 }

@@ -18,7 +18,7 @@ struct ChatMessageView: View {
 
             Text(message.content)
                 .padding()
-                .background(message.isSender ? Color.blue : Color.gray)
+                .background(message.isSender ? Theme.mainColor : Color.gray)
                 .cornerRadius(10)
                 .foregroundColor(.white)
                 .padding(message.isSender ? .leading : .trailing, 55)
