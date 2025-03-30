@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ChatMessageView: View {
     var message: Message
+    @State private var isAppearing = false
 
     var body: some View {
         HStack {
@@ -22,10 +23,17 @@ struct ChatMessageView: View {
                 .cornerRadius(20)
                 .foregroundColor(.white)
                 .padding(message.isSender ? .leading : .trailing, 55)
+                .offset(y: isAppearing ? 0 : 60)
+                .opacity(isAppearing ? 1 : 0)
+                .scaleEffect(isAppearing ? 1 : 0)
+                .animation(.spring(response: 0.8, dampingFraction: 0.8), value: isAppearing)
 
             if !message.isSender {
                 Spacer()
             }
+        }
+        .onAppear {
+            isAppearing = true
         }
     }
 }

@@ -21,8 +21,4 @@ extension TimeInterval {
     public static var eightHours: TimeInterval { return oneHour * 8 }
     public static var twelveHours: TimeInterval { return sixHours * 2 }
     public static var twentyFourHours: TimeInterval { return twelveHours * 2 }
-    public static var fortyEightHours: TimeInterval { return twentyFourHours * 2 }
-    public static var seventyTwoHours: TimeInterval { return twentyFourHours * 3 }
-    public static var oneWeek: TimeInterval { return twentyFourHours * 7 }
-    public static var oneMonth: TimeInterval { return oneWeek * 4 }
 }
