@@ -8,7 +8,6 @@
 import Combine
 import Foundation
 
-@MainActor
 final class ChatViewModel: ObservableObject {
 
     // MARK: Private properties
@@ -47,6 +46,7 @@ final class ChatViewModel: ObservableObject {
 
     // MARK: Public functions
 
+    @MainActor
     func sendMessage() async {
         guard !textInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
         
@@ -73,11 +73,11 @@ final class ChatViewModel: ObservableObject {
         }
     }
 
+    @MainActor
     func loadMessages() async throws {
         messages = try await repository.fetchMessages()
     }
 
-    @MainActor
     func shouldGroupWithNextMessage(at index: Int, in group: MessageGroup) -> Bool {
         guard index < group.messages.count - 1 else { return false }
 
