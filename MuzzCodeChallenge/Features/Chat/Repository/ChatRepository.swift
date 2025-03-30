@@ -12,7 +12,6 @@ protocol ChatRepositoryProtocol {
     func saveMessage(_ message: Message) async throws
     func saveMessages(_ messages: [Message]) async throws
     func fetchMessages() async throws -> [Message]
-    //func deleteMessage(_ message: Message) async throws
 }
 
 final class ChatRepository: ChatRepositoryProtocol {
@@ -21,6 +20,16 @@ final class ChatRepository: ChatRepositoryProtocol {
     private var modelContext: ModelContext?
     
     init() {
+
+        // MARK: Repository should check for connectivity and fetch remote Chat history. If fails proceed to setup SwiftData DB
+
+//        guard Connectivity().isOnline else {
+//            setupContainer()
+//            return
+//        }
+//
+//        let chatHistory = await NetworkManagerProtocol().fetchChatHistory()
+
         setupContainer()
     }
     
@@ -77,15 +86,6 @@ final class ChatRepository: ChatRepositoryProtocol {
 
         return try context.fetch(descriptor)
     }
-    
-//    func deleteMessage(_ message: Message) async throws {
-//        guard let context = modelContext else {
-//            throw ChatRepositoryError.contextUnavailable
-//        }
-//        
-//        context.delete(message)
-//        try context.save()
-//    }
 }
 
 // MARK: - Errors
@@ -157,13 +157,3 @@ extension ChatRepository {
         return mockMessages
     }
 }
-
-//protocol ChatRepositoryProtocol: AnyObject {
-//    func fetchData() async -> [Message]
-//}
-//
-//final class ChatRepository: ChatRepositoryProtocol {
-//
-//    func fetchData() async -> [Message] {
-//
-//        return mockMessages

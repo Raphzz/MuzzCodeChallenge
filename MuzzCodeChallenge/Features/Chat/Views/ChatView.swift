@@ -13,6 +13,10 @@ struct ChatView: View {
 
     @ObservedObject var viewModel = ChatViewModel()
 
+    // MARK: State properties
+
+    @State private var scrollProxy: ScrollViewProxy?
+
     // MARK: body
 
     var body: some View {
@@ -46,13 +50,16 @@ struct ChatView: View {
                 }
             }
         }
+        .onChange(of: viewModel.messages) { _, _ in
+            scrollToBottom()
+        }
     }
 
     // MARK: Private properties
 
     private var messageList: some View {
         ScrollView {
-            ScrollViewReader { scrollView in
+            ScrollViewReader { proxy in
                 LazyVStack(spacing: 16) {
                     ForEach(viewModel.messageGroups) { group in
                         VStack(alignment: .center, spacing: 0) {
@@ -60,7 +67,7 @@ struct ChatView: View {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                                 .padding(.vertical, 8)
-                            
+
                             ForEach(Array(zip(group.messages.indices, group.messages)), id: \.1.id) { index, message in
                                 ChatMessageView(message: message)
                                     .id(message.id)
@@ -71,7 +78,21 @@ struct ChatView: View {
                     }
                 }
                 .padding(.vertical)
+                .onAppear {
+                    scrollProxy = proxy
+                }
+                
+                // Add a spacer at the bottom to ensure we can scroll to it
+                Color.clear
+                    .frame(height: 1)
+                    .id("bottom")
             }
+        }
+    }
+    
+    private func scrollToBottom() {
+        withAnimation {
+            scrollProxy?.scrollTo("bottom", anchor: .bottom)
         }
     }
 }
