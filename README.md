@@ -37,6 +37,7 @@ The project follows a clean MVVM (Model-View-ViewModel) architecture with the fo
 - I decided to use InputBarAccessoryView library as instructed by Muzz engineering team, but the it's implementation with SwiftUI is flawed, there is an issue with the adjustable height of the TextField.
 - I managed to set a fixed Height for the TextField, but once you start breaking lines, the height does not adapt properly. 
 - No UI tests - Easily achievable tho using XCUITest.
+- The message sent animation is not exactly like the example sent by Muzz. I tried to replicate it as much as I could under time constraints. 
 
 ## Key Features
 
