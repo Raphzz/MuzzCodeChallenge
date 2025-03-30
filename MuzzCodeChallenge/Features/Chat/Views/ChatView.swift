@@ -11,7 +11,7 @@ struct ChatView: View {
 
     // MARK: ViewModel
 
-    @ObservedObject var viewModel = ChatViewModel()
+    @StateObject var viewModel = ChatViewModel()
 
     // MARK: State properties
 
