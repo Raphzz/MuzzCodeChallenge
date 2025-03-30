@@ -2,9 +2,17 @@ import SwiftUI
 import InputBarAccessoryView
 
 struct InputBarView: UIViewRepresentable {
+
+    // MARK: Binding properties
+
     @Binding var text: String
+
+    // MARK: Public properties
+
     let onSend: () -> Void
-    
+
+    // MARK: Public functions
+
     func makeUIView(context: Context) -> InputBarAccessoryView {
         let inputBar = InputBarAccessoryView()
         inputBar.delegate = context.coordinator
@@ -22,7 +30,9 @@ struct InputBarView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
-    
+
+    // MARK: Coordinator
+
     class Coordinator: NSObject, InputBarAccessoryViewDelegate, UITextViewDelegate {
         var parent: InputBarView
         

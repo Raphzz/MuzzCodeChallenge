@@ -16,7 +16,7 @@ final class ChatViewModel: ObservableObject {
 
     // MARK: Public properties
 
-    var title: String = "chat.title".localized
+    let title: String = "chat.title".localized
 
     // MARK: Published properties
 

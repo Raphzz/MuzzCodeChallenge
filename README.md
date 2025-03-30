@@ -33,12 +33,10 @@ The project follows a clean MVVM (Model-View-ViewModel) architecture with the fo
 - **Language**: Swift
 
 ## Limitations
-I decided to use InputBarAccessoryView library as instructed by Muzz engineering team, but the it's implementation with SwiftUI is flawed, there is an issue with the adjustable height of the TextField.
-I managed to set a fixed Height for the TextField, but once you start breaking lines, the height does not adapt properly. 
 
-I did  try to briefly look through their GitHub issues, see if someone else had this issue before, but could not find anything conclusive.
-
-I decided to focus on more pressing things, such as architecture and the chat functionality itself.
+- I decided to use InputBarAccessoryView library as instructed by Muzz engineering team, but the it's implementation with SwiftUI is flawed, there is an issue with the adjustable height of the TextField.
+- I managed to set a fixed Height for the TextField, but once you start breaking lines, the height does not adapt properly. 
+- No UI tests - Easily achievable tho using XCUITest.
 
 ## Key Features
 
