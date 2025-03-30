@@ -11,7 +11,7 @@ struct ChatView: View {
 
     // MARK: ViewModel
 
-    @ObservedObject var viewModel = ChatViewModel.mock()
+    @ObservedObject var viewModel = ChatViewModel()
 
     // MARK: body
 
@@ -19,9 +19,10 @@ struct ChatView: View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
                 messageList
-
                 InputBarView(text: $viewModel.textInput) {
-                    viewModel.sendMessage()
+                    Task {
+                        await viewModel.sendMessage()
+                    }
                 }
                 .frame(height: 70)
             }
@@ -36,6 +37,15 @@ struct ChatView: View {
                 .toggleStyle(SwitchToggleStyle(tint: Color(Theme.mainColor)))
             }
         }
+        .onAppear() {
+            Task {
+                do {
+                    try await viewModel.loadMessages()
+                } catch {
+                    print("Error loading messages: \(error)")
+                }
+            }
+        }
     }
 
     // MARK: Private properties
@@ -43,21 +53,26 @@ struct ChatView: View {
     private var messageList: some View {
         ScrollView {
             ScrollViewReader { scrollView in
-                LazyVStack {
-                    ForEach(viewModel.messages) { message in
-                        ChatMessageView(message: message)
-                            .id(message.id)
-                            .padding(.horizontal)
+                LazyVStack(spacing: 16) {
+                    ForEach(viewModel.messageGroups) { group in
+                        VStack(alignment: .center, spacing: 0) {
+                            Text(group.formattedTimestamp)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.vertical, 8)
+                            
+                            ForEach(Array(zip(group.messages.indices, group.messages)), id: \.1.id) { index, message in
+                                ChatMessageView(message: message)
+                                    .id(message.id)
+                                    .padding(.horizontal)
+                                    .padding(.bottom, viewModel.shouldGroupWithNextMessage(at: index, in: group) ? 2 : 8)
+                            }
+                        }
                     }
                 }
-                .onReceive(viewModel.$messages) { _ in
-                    withAnimation {
-                        scrollView.scrollTo(viewModel.messages.last?.id)
-                    }
-                }
+                .padding(.vertical)
             }
         }
-        .padding(.vertical)
     }
 }
 
@@ -65,6 +80,6 @@ struct ChatView: View {
 
 #Preview {
     NavigationView {
-        ChatView(viewModel: ChatViewModel())
+        ChatView()
     }
 }

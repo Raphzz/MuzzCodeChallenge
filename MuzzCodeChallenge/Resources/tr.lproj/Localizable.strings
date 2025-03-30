@@ -1,3 +1,5 @@
 "chat.title" = "Sohbet";
 "chat.send.message" = "Gönder";
 "chat.message.placeholder" = "Bir mesaj yazın..."; 
+"chat.timestamp.today" = "Bugün %@";
+"chat.timestamp.yesterday" = "Dün %@";

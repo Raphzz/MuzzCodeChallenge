@@ -6,10 +6,19 @@
 //
 
 import Foundation
+import SwiftData
 
-struct Message: Identifiable {
-    var id: String = UUID().uuidString
+@Model
+final class Message {
+    var id: String
     var content: String
     var isSender: Bool
     var timestamp: Date
+    
+    init(id: String = UUID().uuidString, content: String, isSender: Bool, timestamp: Date) {
+        self.id = id
+        self.content = content
+        self.isSender = isSender
+        self.timestamp = timestamp
+    }
 }

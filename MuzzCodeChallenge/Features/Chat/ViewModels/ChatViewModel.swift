@@ -8,74 +8,75 @@
 import Combine
 import Foundation
 
-class ChatViewModel: ObservableObject {
+@MainActor
+final class ChatViewModel: ObservableObject {
+
+    // MARK: Private properties
+
+    private let repository: ChatRepositoryProtocol
 
     // MARK: Public properties
 
-    let title: String = "chat.title".localized
+    var title: String = "chat.title".localized
 
     // MARK: Published properties
 
     @Published var messages: [Message] = []
     @Published var textInput: String = ""
     @Published var isSender: Bool = true
+    @Published var isLoading: Bool = false
 
-    // MARK: Published functions
+    // MARK: Computed properties
 
-    @MainActor
-    func sendMessage() {
-        let newMessage = Message(content: self.textInput, isSender: isSender, timestamp: Date())
-        self.textInput = ""
-
-        self.messages.append(newMessage)
+    var messageGroups: [MessageGroup] {
+        let calendar = Calendar.current
+        let groupedMessages = Dictionary(grouping: messages) { message -> Date in
+            calendar.date(bySetting: .minute, value: 0, of: message.timestamp) ?? message.timestamp
+        }
+        
+        return groupedMessages
+            .map { MessageGroup(timestamp: $0.key, messages: $0.value.sorted(by: { $0.timestamp < $1.timestamp })) }
+            .sorted(by: { $0.timestamp < $1.timestamp })
     }
 
-    static func mock() -> ChatViewModel {
-        let mockVm = ChatViewModel()
+    // MARK: init
 
-        let now = Date()
-        mockVm.messages = [
-            Message(
-                content: "Hey! How are you? 👋",
-                isSender: false,
-                timestamp: now.addingTimeInterval(-3600) // 1 hour ago
-            ),
-            Message(
-                content: "I'm doing great, thanks for asking! How about you?",
-                isSender: true,
-                timestamp: now.addingTimeInterval(-3540) // 59 minutes ago
-            ),
-            Message(
-                content: "Pretty good! Did you see the new updates to the app?",
-                isSender: false,
-                timestamp: now.addingTimeInterval(-3480) // 58 minutes ago
-            ),
-            Message(
-                content: "Yes! The new design looks amazing 😍",
-                isSender: true,
-                timestamp: now.addingTimeInterval(-3420) // 57 minutes ago
-            ),
-            Message(
-                content: "I especially love the new chat features. The animations are so smooth!",
-                isSender: true,
-                timestamp: now.addingTimeInterval(-3419) // Right after previous message
-            ),
-            Message(
-                content: "Totally agree! The team did an incredible job 🚀",
-                isSender: false,
-                timestamp: now.addingTimeInterval(-3300) // 55 minutes ago
-            ),
-            Message(
-                content: "By the way, have you tried the new toggle feature? You can switch between sender modes!",
-                isSender: false,
-                timestamp: now.addingTimeInterval(-180) // 3 minutes ago
-            ),
-            Message(
-                content: "Testing it right now! It's perfect for debugging 🛠️",
-                isSender: true,
-                timestamp: now.addingTimeInterval(-60) // 1 minute ago
-            )
-        ]
-        return mockVm
+    init(repository: ChatRepositoryProtocol = ChatRepository()) {
+        self.repository = repository
+    }
+
+    // MARK: Public functions
+
+    func sendMessage() async {
+        guard !textInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+        
+        let newMessage = Message(
+            content: textInput,
+            isSender: isSender,
+            timestamp: Date()
+        )
+        
+        do {
+            try await repository.saveMessage(newMessage)
+            messages.append(newMessage)
+            textInput = ""
+        } catch {
+            print("Failed to save message: \(error)")
+        }
+    }
+
+    func loadMessages() async throws {
+        messages = try await repository.fetchMessages()
+    }
+
+    @MainActor
+    func shouldGroupWithNextMessage(at index: Int, in group: MessageGroup) -> Bool {
+        guard index < group.messages.count - 1 else { return false }
+
+        let currentMessage = group.messages[index]
+        let nextMessage = group.messages[index + 1]
+
+        return currentMessage.isSender == nextMessage.isSender &&
+               nextMessage.timestamp.timeIntervalSince(currentMessage.timestamp) <= 20
     }
 }

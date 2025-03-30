@@ -19,7 +19,7 @@ struct ChatMessageView: View {
             Text(message.content)
                 .padding()
                 .background(message.isSender ? Theme.mainColor : Color.gray)
-                .cornerRadius(10)
+                .cornerRadius(20)
                 .foregroundColor(.white)
                 .padding(message.isSender ? .leading : .trailing, 55)
 
@@ -28,4 +28,15 @@ struct ChatMessageView: View {
             }
         }
     }
+}
+
+#Preview {
+    ChatMessageView(
+        message: Message(
+            id: "",
+            content: "This is a test message",
+            isSender: true,
+            timestamp: Date()
+        )
+    )
 }
