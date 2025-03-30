@@ -53,11 +53,19 @@ final class ChatViewModel: ObservableObject {
         let newMessage = Message(
             content: textInput,
             isSender: isSender,
-            timestamp: Date()
+            timestamp: Date(),
+            shouldAnimate: true
         )
-        
+
         do {
-            try await repository.saveMessage(newMessage)
+            let messageToSave = Message(
+                content: textInput,
+                isSender: isSender,
+                timestamp: Date(),
+                shouldAnimate: false
+            )
+
+            try await repository.saveMessage(messageToSave)
             messages.append(newMessage)
             textInput = ""
         } catch {

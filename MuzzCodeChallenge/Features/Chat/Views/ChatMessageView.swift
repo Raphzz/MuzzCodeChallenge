@@ -23,17 +23,25 @@ struct ChatMessageView: View {
                 .cornerRadius(20)
                 .foregroundColor(.white)
                 .padding(message.isSender ? .leading : .trailing, 55)
-                .offset(y: isAppearing ? 0 : 60)
-                .opacity(isAppearing ? 1 : 0)
-                .scaleEffect(isAppearing ? 1 : 0)
-                .animation(.spring(response: 0.8, dampingFraction: 0.8), value: isAppearing)
+                .offset(y: message.shouldAnimate ? (isAppearing ? 0 : 60) : 0)
+                .opacity(message.shouldAnimate ? (isAppearing ? 1 : 0) : 1)
+                .scaleEffect(message.shouldAnimate ? (isAppearing ? 1 : 0) : 1)
 
             if !message.isSender {
                 Spacer()
             }
         }
         .onAppear {
-            isAppearing = true
+            if message.shouldAnimate {
+                withAnimation {
+                    isAppearing = true
+
+                    // Set shouldAnimate to false after animation completes
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                        self.message.shouldAnimate = false
+                    }
+                }
+            }
         }
     }
 }

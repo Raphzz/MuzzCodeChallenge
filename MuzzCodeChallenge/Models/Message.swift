@@ -14,11 +14,13 @@ final class Message {
     var content: String
     var isSender: Bool
     var timestamp: Date
+    var shouldAnimate: Bool
     
-    init(id: String = UUID().uuidString, content: String, isSender: Bool, timestamp: Date) {
+    init(id: String = UUID().uuidString, content: String, isSender: Bool, timestamp: Date, shouldAnimate: Bool = false) {
         self.id = id
         self.content = content
         self.isSender = isSender
         self.timestamp = timestamp
+        self.shouldAnimate = shouldAnimate
     }
 }
